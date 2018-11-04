@@ -1,10 +1,15 @@
-# Scheme - Lee County Funfair
+#Traversal with Prolog
 
 
 ### Quick start
 1) Download [GNU Prolog](http://www.gprolog.org/#download)
 2) Download/Clone this repository.
 3) Consult the 'transversal.pl' file.
+4) Enter:
+
+```prolog
+path_to_phone(1,16,My_Path).
+```
 
 # Table of Contents
 * [Summary](#summary)
@@ -18,6 +23,8 @@ room of a one-story building, to any other room in that building (if it’s poss
 must go through to get to the destination room. In addition to the previous statement, there will be phones ringing in
 one or more of the rooms. Our prolog program should ONLY tell us how to get to those rooms. If we attempt to go
 to a room that does not have a ringing phone, the program should not produce any output.
+
+![map](https://github.com/jacobrozell/PrologProject/blob/master/map.PNG)
 ___
 
 ### API
