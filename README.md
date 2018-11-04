@@ -94,7 +94,7 @@ ___
 ```prolog
 next_to(Room1, Room2) :- (door(Room1, Room2); door(Room2, Room1)).
 ```
-```scheme
+```prolog
 next_to(5,7).
 ```
 #### next_to will return 'yes' if the rooms are next to each other. It uses door(X,Y) to determine this.
