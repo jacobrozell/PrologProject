@@ -1,4 +1,4 @@
-#Traversal with Prolog
+# Traversal with Prolog
 
 
 ### Quick start
@@ -29,61 +29,75 @@ ___
 
 ### API
 
-## ball-val
-```racket
-(define (ball-val color)
-  (let ((ball color))
-    (cond ((equal? 'W ball) 1)
-          ((equal? 'R ball) 10)
-          ((equal? 'G ball) 15)
-          ((equal? 'B ball) 20))))
+## room()
+```prolog
+room(1).
+room(2).
+room(3).
+room(4).
+room(5).
+room(6).
+room(7).
+room(8).
+room(9).
+room(10).
+room(11).
+room(12).
+room(13).
+room(14).
+room(15).
+room(16).
 ```
-```scheme
-(ball-val 'R)
-```
-#### The procedure ball-val takes a color as an argument and returns how many points that color is worth.
+#### This creates the 16 rooms in the prolog database.
 ___
 
-## count-balls
-```racket
-(define (count-balls color bucket)
-  (count
-   (keep (lambda (c) (equal? color c)) bucket)))
+## door(X,Y)
+```prolog
+door(1,2).
+door(1,7).
+door(2,8).
+door(3,8).
+door(4,8).
+door(4,9).
+door(5,6).
+door(5,9).
+door(6,9).
+door(7,8).
+door(7,9).
+door(7,10).
+door(7,11).
+door(7,12).
+door(7,13).
+door(7,14).
+door(14,15).
+door(15,16).
 ```
-```scheme
-(count-balls 'R '(R B G R R R B W R W))
+```prolog
+door(7,X).
 ```
-#### The procedure count-balls takes a color and a bucket as an argument and returns the number of balls in the bucket with the given color.
+#### This creates the doors in the prolog database. If called (like the example above) it show which rooms connect to room 7.
 ___
 
-## color-counts
-```racket
-(define (color-counts bucket)
-  (let ([R (count-balls 'R bucket)]
-        [G (count-balls 'G bucket)]
-        [B (count-balls 'B bucket)]
-        [W (count-balls 'W bucket)])
-    (display (list R G W B))))
+## phoneRinging(X)
+```prolog
+phoneRinging(5).
+phoneRinging(9).
+phoneRinging(16).
 ```
-```scheme
-(color-counts '(R B G R R R B W R W))
+```prolog
+phoneRinging(5). 
 ```
-#### The procedure color-counts takes a bucket as an argument and returns a
-#### sentence containing the number of reds, the number of green, the number of blues, and
-#### the number of whites in the bucket.
+#### phoneRinging will return 'yes' if a phone is ringing in that room.
 ___
 
-## bucket-val
-```
-(define (bucket-val bucket)
-  (let ((score 0))
-    (apply + (map (lambda (c) (+ score (ball-val c))) bucket))))
+## next_to(Room1,Room2)
+```prolog
+next_to(Room1, Room2) :- (door(Room1, Room2); door(Room2, Room1)).
 ```
 ```scheme
-(bucket-val '(R B G R R R B W R W))
+next_to(5,7).
 ```
-#### The procedure bucket-val takes a bucket as an argument and returns the total
-#### number of points that the bucket is worth.
+#### next_to will return 'yes' if the rooms are next to each other. It uses door(X,Y) to determine this.
 ___
 
 ## judge
