@@ -156,19 +156,6 @@ find_path(Start, Dest, T):-nonvar(Start), nonvar(Dest), var(T),
 #### find_path uses move_forward and move_backward to find a path.
 ___
 
-
-## find_path(Start, End, T)
-```prolog
-find_path(Start, Dest, T):-nonvar(Start), nonvar(Dest), var(T),
-	T = [],
-	move_forward(Start, Dest, T, R),
-	move_backward(R, Route, []),
-	write(Route).
-```
-#### find_path uses move_forward and move_backward to find a path.
-___
-
-
 ## move_forward(Start, End, T, R)
 ```prolog
 % Used when Starting room and ending room are the same
