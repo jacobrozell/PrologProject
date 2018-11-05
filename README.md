@@ -8,7 +8,7 @@
 4) Enter:
 
 ```prolog
-path_to_phone(1,16,My_Path).
+path_to_phone(1,16).
 ```
 
 # Table of Contents
@@ -29,7 +29,7 @@ ___
 
 ### API
 
-## room()
+## room(X)
 ```prolog
 room(1).
 room(2).
@@ -100,20 +100,95 @@ next_to(5,7).
 #### next_to will return 'yes' if the rooms are next to each other. It uses door(X,Y) to determine this.
 ___
 
-## judge
-```racket
-(define (judge bucket_1 bucket_2)
-  (let ((score1 (bucket-val bucket_1) ))
-    (let ((score2 (bucket-val bucket_2) ))
-      (cond ((> score1 score2) "Bucket 1, won!")
-            ((> score2 score1) "Bucket 2, won!")
-            ((equal? score1 score2) "It's a tie!")))))
+## path_to_phone(Start, End)
+```prolog
+%---Given start and destination---%
+path_to_phone(Start, End):-nonvar(Start), nonvar(End),
+	phoneRinging(End),
+	get_paths(Start, End),
+	fail.
+
+
+%---Given start only---%
+path_to_phone(Start, End):-nonvar(Start), var(End),
+	forall(phoneRinging(E), (get_paths(Start, E))),
+	fail.
+
+
+%---Given destination only---%
+path_to_phone(Start,End):-var(Start), nonvar(End),
+	phoneRinging(End),
+	forall(room(E), (get_paths(E, End))),
+	fail.
+
+
+%---Given nothing---%
+path_to_phone(Start, End):-var(Start), var(End),
+	forall(phoneRinging(PH), forall(room(Room), (get_paths(Room, PH)))),
+	fail.
 ```
-```scheme
-(judge '(R B G R R R B W R W) '(W R R R R G B B G W))
+```prolog
+path_to_phone(1, 16). % Both
+path_to_phone(1, End). % Start only
+path_to_phone(Start, 16). % End only
+path_to_phone(Start, End). % Nothing
 ```
-#### The procedure judge takes two arguments bucket_1 and bucket_2 and returns
-#### which player won the game.
+#### path_to_phone has four procedures, one where the start and end are given, one where only the start is given, one where 
+#### only the end is given, and one where nothing is given.
+___
+
+## get_paths(Start, End)
+```prolog
+get_paths(Start, End):-nonvar(Start), nonvar(End),
+	forall(find_path(Start, End, R), nl).
+```
+#### get_paths uses find_path to find all the paths available from the Start to the End.
+___
+
+## find_path(Start, End, T)
+```prolog
+find_path(Start, Dest, T):-nonvar(Start), nonvar(Dest), var(T),
+	T = [],
+	move_forward(Start, Dest, T, R),
+	move_backward(R, Route, []),
+	write(Route).
+```
+#### find_path uses move_forward and move_backward to find a path.
+___
+
+
+## find_path(Start, End, T)
+```prolog
+find_path(Start, Dest, T):-nonvar(Start), nonvar(Dest), var(T),
+	T = [],
+	move_forward(Start, Dest, T, R),
+	move_backward(R, Route, []),
+	write(Route).
+```
+#### find_path uses move_forward and move_backward to find a path.
+___
+
+
+## move_forward(Start, End, T, R)
+```prolog
+% Used when Starting room and ending room are the same
+move_forward(Start,Start,T,[Start|T]). 	
+
+move_forward(Start,End,T,R):-
+   next_to(Start,Next),
+	\+(member(Next,T)), 
+	move_forward(Next,End,[Start|T],R).
+```
+#### move_forward will move forward if there is a room next_to it that can be moved to.
+___
+
+
+## move_backward([H|T],Z,Acc)
+```prolog
+move_backward([],Z,Z).
+move_backward([H|T],Z,Acc) :-move_backward(T,Z,[H|Acc]).
+```
+#### move_backward will reverse backwards a room.
 ___
 
 #### License
